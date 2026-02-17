@@ -252,7 +252,7 @@
             <!-- Item 3: Strigil -->
             <div class="artifact-card group">
                 <div class="h-56 bg-black/40 rounded flex items-center justify-center mb-3 overflow-hidden">
-                    <img src="https://i.redd.it/tl9ef5rg8vm41.jpg" alt="Strigil" class="object-cover h-full w-full opacity-90 group-hover:opacity-100 transition">
+                    <img src="https://coimages.sciencemuseumgroup.org.uk/351/507/medium_smg00237229.jpg" alt="Strigil" class="object-cover h-full w-full opacity-90 group-hover:opacity-100 transition">
                 </div>
                 <h3 class="font-bold text-lg mb-2">Curved Metal Tool</h3>
                 <p class="text-sm text-gray-300 mb-3 italic">Bronze handle. Curved blade.</p>
@@ -295,10 +295,11 @@
             <span class="bg-pink-500 text-white px-4 py-1 rounded-full text-sm font-bold tracking-widest uppercase inline-block">Phase 5: Critical Thinking</span>
         </div>
 
+        <!-- Corrected Layout for Timer Visibility -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-6xl text-left h-full max-h-[85vh]">
             
             <!-- Left: Task & Roles -->
-            <div class="flex flex-col gap-4">
+            <div class="flex flex-col gap-4 overflow-y-auto">
                 <div>
                     <h2 class="text-2xl font-bold mb-3 text-pink-100">Discussion Questions</h2>
                     <div class="bg-white/10 p-4 rounded-xl backdrop-blur-md border border-white/20">
@@ -359,9 +360,10 @@
                 </div>
             </div>
 
-            <!-- Right: Language Bank & Timer -->
+            <!-- Right: Language Bank & Timer (FIXED LAYOUT) -->
             <div class="flex flex-col h-full gap-4">
-                <div class="bg-yellow-50 text-slate-900 p-5 rounded-xl border-l-8 border-yellow-500 shadow-xl flex-grow overflow-y-auto max-h-[400px]">
+                <!-- Language Bank with MAX HEIGHT -->
+                <div class="bg-yellow-50 text-slate-900 p-5 rounded-xl border-l-8 border-yellow-500 shadow-xl flex-grow overflow-y-auto max-h-[40vh]">
                     <h3 class="text-lg font-black uppercase mb-3 text-yellow-700 flex items-center gap-2 sticky top-0 bg-yellow-50">
                         <span>💬</span> Language Bank
                     </h3>
@@ -376,12 +378,12 @@
                 </div>
 
                 <!-- Timer -->
-                <div class="flex items-center justify-between bg-black/40 p-4 rounded-xl mt-auto">
+                <div class="flex items-center justify-between bg-black/40 p-4 rounded-xl mt-auto shadow-lg border border-white/10">
                      <div class="text-right">
-                        <p class="text-xs text-gray-400 uppercase">Discussion Time</p>
-                        <p id="timer-text-2" class="text-3xl font-mono font-bold text-white">3:00</p>
+                        <p class="text-xs text-gray-400 uppercase font-bold tracking-wider">Discussion Time</p>
+                        <p id="timer-text-2" class="text-4xl font-mono font-black text-white drop-shadow-md">3:00</p>
                     </div>
-                    <button onclick="startTimer(2, 180)" id="start-btn-2" class="bg-pink-600 hover:bg-pink-500 text-white font-bold py-2 px-6 rounded-full transition shadow-lg text-sm">
+                    <button onclick="startTimer(2, 180)" id="start-btn-2" class="bg-pink-600 hover:bg-pink-500 text-white font-bold py-3 px-8 rounded-full transition shadow-xl transform hover:scale-105 text-sm uppercase tracking-wide">
                         Start Round
                     </button>
                 </div>
@@ -394,8 +396,8 @@
     <button onclick="changeSlide(1)" class="nav-btn">Next Phase →</button>
 
     <script>
-        let currentSlide = 0;
-        const slides = document.querySelectorAll('.slide');
+        var currentSlide = 0;
+        var slides = document.querySelectorAll('.slide');
         
         // Navigation Logic
         function changeSlide(direction) {
@@ -410,28 +412,28 @@
         }
 
         // Timer Logic (Reusable)
-        let timers = {}; 
+        var timers = {}; 
 
         function setProgress(id, percent, circumference) {
-            const ring = document.getElementById(`timer-ring-${id}`);
+            var ring = document.getElementById(`timer-ring-${id}`);
             if(ring) {
-                const offset = circumference - percent / 100 * circumference;
+                var offset = circumference - percent / 100 * circumference;
                 ring.style.strokeDashoffset = offset;
             }
         }
 
         function startTimer(id, duration) {
-            const btn = document.getElementById(`start-btn-${id}`);
-            const textDisplay = document.getElementById(`timer-text-${id}`);
-            const ring = document.getElementById(`timer-ring-${id}`);
+            var btn = document.getElementById(`start-btn-${id}`);
+            var textDisplay = document.getElementById(`timer-text-${id}`);
+            var ring = document.getElementById(`timer-ring-${id}`);
 
             if(btn) btn.style.display = 'none'; 
             
-            let timeLeft = duration;
-            let circumference = 0;
+            var timeLeft = duration;
+            var circumference = 0;
 
             if (ring) {
-                const radius = ring.getAttribute('r');
+                var radius = ring.getAttribute('r');
                 circumference = 2 * Math.PI * radius;
                 ring.style.strokeDasharray = `${circumference} ${circumference}`;
             }
@@ -441,22 +443,22 @@
                 
                 // Format MM:SS for the digital display
                 if (id === 2) {
-                    const minutes = Math.floor(timeLeft / 60);
-                    const seconds = timeLeft % 60;
+                    var minutes = Math.floor(timeLeft / 60);
+                    var seconds = timeLeft % 60;
                     textDisplay.innerText = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
                 } else {
                     textDisplay.innerText = timeLeft;
                 }
 
                 if (ring) {
-                    const percent = (timeLeft / duration) * 100;
+                    var percent = (timeLeft / duration) * 100;
                     setProgress(id, percent, circumference);
                 }
 
                 if (timeLeft <= 0) {
                     clearInterval(timers[id]);
                     textDisplay.innerText = id === 2 ? "0:00" : "0";
-                    const audio = new Audio('https://actions.google.com/sounds/v1/alarms/beep_short.ogg');
+                    var audio = new Audio('https://actions.google.com/sounds/v1/alarms/beep_short.ogg');
                     audio.play();
                 }
             }, 1000);
@@ -464,7 +466,7 @@
 
         // Reveal Logic
         function reveal(btn, text) {
-            const p = btn.nextElementSibling;
+            var p = btn.nextElementSibling;
             p.innerText = text;
             p.classList.remove('hidden');
             btn.style.display = 'none';
