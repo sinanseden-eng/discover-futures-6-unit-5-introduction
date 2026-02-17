@@ -13,7 +13,7 @@
             color: #e2e8f0;
             overflow: hidden;
         }
-        h1, h2 {
+        h1, h2, h3 {
             font-family: 'Cinzel', serif;
         }
         
@@ -94,6 +94,46 @@
             background-size: cover;
             background-position: center;
         }
+
+        /* Artifact Card */
+        .artifact-card {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 1rem;
+            padding: 1rem;
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s;
+        }
+        .artifact-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        /* Role Card */
+        .role-card {
+            background: white;
+            color: #0f172a;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            width: 280px;
+            text-align: left;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            border-top: 5px solid transparent;
+        }
+        .role-card.speaker { border-color: #db2777; }
+        .role-card.questioner { border-color: #2563eb; }
+        .role-card.notetaker { border-color: #16a34a; }
+        
+        .role-icon { font-size: 2rem; margin-bottom: 0.5rem; display: block; }
+        
+        .role-instructions {
+            background-color: #f1f5f9;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            margin-top: 0.5rem;
+            font-size: 0.85rem;
+            line-height: 1.4;
+        }
     </style>
 </head>
 <body>
@@ -126,24 +166,27 @@
             <span class="bg-blue-500 text-white px-4 py-1 rounded-full text-sm font-bold tracking-widest uppercase inline-block">Phase 2: The Buzz</span>
         </div>
 
-        <h2 class="text-4xl font-bold mb-8">What is that one object?</h2>
+        <h2 class="text-4xl font-bold mb-4">What is that one object?</h2>
+        <p class="text-red-300 font-bold text-lg mb-6 bg-red-900/50 px-4 py-2 rounded-lg border border-red-500/50 animate-pulse">
+            ⚠️ RULE: No electronics! (No phones, no headphones)
+        </p>
 
         <!-- Circular Timer -->
         <div class="relative w-64 h-64 flex items-center justify-center mb-8">
             <svg class="w-full h-full transform -rotate-90">
                 <circle cx="128" cy="128" r="120" stroke="#334155" stroke-width="8" fill="none"></circle>
-                <circle id="timer-ring" cx="128" cy="128" r="120" stroke="#facc15" stroke-width="8" fill="none" stroke-dasharray="754" stroke-dashoffset="0" class="timer-circle"></circle>
+                <circle id="timer-ring-1" cx="128" cy="128" r="120" stroke="#facc15" stroke-width="8" fill="none" stroke-dasharray="754" stroke-dashoffset="0" class="timer-circle"></circle>
             </svg>
-            <div id="timer-text" class="absolute text-7xl font-mono font-bold text-white">60</div>
+            <div id="timer-text-1" class="absolute text-7xl font-mono font-bold text-white">60</div>
         </div>
 
-        <button onclick="startTimer()" id="start-btn" class="bg-green-600 hover:bg-green-500 text-white font-bold py-3 px-8 rounded-full text-xl transition transform hover:scale-105 shadow-lg flex items-center gap-2">
+        <button onclick="startTimer(1, 60)" id="start-btn-1" class="bg-green-600 hover:bg-green-500 text-white font-bold py-3 px-8 rounded-full text-xl transition transform hover:scale-105 shadow-lg flex items-center gap-2">
             <span>⏱️</span> Start Timer
         </button>
 
         <div class="script-box">
             <p class="text-amber-400 font-bold text-xs uppercase mb-2">Teacher Script:</p>
-            <p>"Turn to your partner. Decide: Is it your phone? Your lucky pen? <span class="highlight">What would archaeologists THINK it was used for?</span>"</p>
+            <p>"Turn to your partner. Decide: Is it your favorite sneaker? A water bottle? Your backpack? <span class="highlight">Remember: No technology!</span> What would archaeologists THINK it was used for?"</p>
         </div>
     </div>
 
@@ -157,20 +200,64 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-5xl w-full">
             <div class="bg-black/50 p-8 rounded-2xl border border-purple-500/30 backdrop-blur-sm">
-                <div class="text-6xl mb-4">🎧</div>
-                <h3 class="text-2xl font-bold mb-2">Headphones?</h3>
-                <p class="text-purple-300 italic">"Ancient jewelry for ears..."</p>
+                <div class="text-6xl mb-4">👟</div>
+                <h3 class="text-2xl font-bold mb-2">A Sneaker?</h3>
+                <p class="text-purple-300 italic">"A ceremonial boat for the foot..."</p>
             </div>
             <div class="bg-black/50 p-8 rounded-2xl border border-purple-500/30 backdrop-blur-sm">
-                <div class="text-6xl mb-4">📱</div>
-                <h3 class="text-2xl font-bold mb-2">Smartphone?</h3>
-                <p class="text-purple-300 italic">"A shiny brick for building houses..."</p>
+                <div class="text-6xl mb-4">🥤</div>
+                <h3 class="text-2xl font-bold mb-2">Water Bottle?</h3>
+                <p class="text-purple-300 italic">"A vessel for holding sacred holy water..."</p>
             </div>
         </div>
 
         <div class="script-box">
             <p class="text-amber-400 font-bold text-xs uppercase mb-2">Teacher Script:</p>
-            <p>"Exactly. We leave things behind. Archaeologists find them. And then... <span class="highlight">they GUESS. They SPECULATE.</span> Sometimes right, sometimes wrong."</p>
+            <p>"Exactly. We leave everyday things behind. Archaeologists find them. And then... <span class="highlight">they GUESS. They SPECULATE.</span> Sometimes right, sometimes wrong."</p>
+        </div>
+    </div>
+
+    <!-- SLIDE 3.5: MYSTERY ARTIFACTS -->
+    <div class="slide" id="slide3b">
+        <div class="bg-overlay" style="background-image: url('https://images.unsplash.com/photo-1588863673516-72f567341399?q=80&w=1600&auto=format&fit=crop'); opacity: 0.4;"></div>
+        
+        <div class="mb-4">
+            <span class="bg-teal-500 text-white px-4 py-1 rounded-full text-sm font-bold tracking-widest uppercase inline-block">Phase 3.5: Real Mysteries</span>
+        </div>
+
+        <h2 class="text-3xl font-bold mb-6 text-teal-100">What were these used for?</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-6xl">
+            <!-- Item 1: Roman Dodecahedron -->
+            <div class="artifact-card group">
+                <div class="h-56 bg-black/40 rounded flex items-center justify-center mb-3 overflow-hidden">
+                    <img src="https://th-thumbnailer.cdn-si-edu.com/97gmJK71gk9qfk0jnA9OE622lXg=/1026x684/filters:no_upscale():focal(640x482:641x483)/https://tf-cmsv2-smithsonianmag-media.s3.amazonaws.com/filer_public/5b/ec/5bec3ebf-4cc4-4fd3-a525-ac82c0a78d72/img_4496_1.jpeg" alt="Dodecahedron" class="object-cover h-full w-full opacity-90 group-hover:opacity-100 transition">
+                </div>
+                <h3 class="font-bold text-lg mb-2">Roman Dodecahedron</h3>
+                <p class="text-sm text-gray-300 mb-3 italic">Bronze. Holes of different sizes.</p>
+                <button onclick="reveal(this, 'Knitting glove fingers? Rangefinder? A toy? No one knows!')" class="w-full bg-teal-700 hover:bg-teal-600 py-2 rounded text-xs font-bold transition">Reveal Guess</button>
+                <p class="hidden-answer text-teal-300 text-sm font-bold mt-2 hidden"></p>
+            </div>
+            <!-- Item 2: Egyptian Headrest -->
+            <div class="artifact-card group">
+                <div class="h-56 bg-black/40 rounded flex items-center justify-center mb-3 overflow-hidden">
+                    <img src="https://www.alexanderancientart.com/object-pics/1072a.jpg" alt="Headrest" class="object-cover h-full w-full opacity-90 group-hover:opacity-100 transition">
+                </div>
+                <h3 class="font-bold text-lg mb-2">Egyptian Stand</h3>
+                <p class="text-sm text-gray-300 mb-3 italic">Wooden. Curved top.</p>
+                <button onclick="reveal(this, 'An ancient PILLOW! Used to keep heads cool while sleeping.')" class="w-full bg-teal-700 hover:bg-teal-600 py-2 rounded text-xs font-bold transition">Reveal Guess</button>
+                <p class="hidden-answer text-teal-300 text-sm font-bold mt-2 hidden"></p>
+            </div>
+            <!-- Item 3: Strigil -->
+            <div class="artifact-card group">
+                <div class="h-56 bg-black/40 rounded flex items-center justify-center mb-3 overflow-hidden">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Strigil%2C_Roman%2C_199_BCE-500_CE_Wellcome_L0058129.jpg/800px-Strigil%2C_Roman%2C_199_BCE-500_CE_Wellcome_L0058129.jpg" alt="Strigil" class="object-cover h-full w-full opacity-90 group-hover:opacity-100 transition">
+                </div>
+                <h3 class="font-bold text-lg mb-2">Curved Metal Tool</h3>
+                <p class="text-sm text-gray-300 mb-3 italic">Bronze handle. Curved blade.</p>
+                <button onclick="reveal(this, 'A Strigil. Used to scrape oil and dirt off skin before soap!')" class="w-full bg-teal-700 hover:bg-teal-600 py-2 rounded text-xs font-bold transition">Reveal Guess</button>
+                <p class="hidden-answer text-teal-300 text-sm font-bold mt-2 hidden"></p>
+            </div>
         </div>
     </div>
 
@@ -182,9 +269,7 @@
             <span class="bg-red-500 text-white px-4 py-1 rounded-full text-sm font-bold tracking-widest uppercase inline-block">Phase 4: The Bridge</span>
         </div>
 
-        <h1 class="text-5xl md:text-7xl font-black mb-4 text-white drop-shadow-xl">
-            Emperor Qin's Army
-        </h1>
+        <h1 class="text-5xl md:text-7xl font-black mb-4 text-white drop-shadow-xl">Emperor Qin's Army</h1>
 
         <p class="text-2xl text-red-200 font-light mb-12 max-w-3xl leading-relaxed">
             What did he want us to know about him?
@@ -197,7 +282,96 @@
 
         <div class="script-box">
             <p class="text-amber-400 font-bold text-xs uppercase mb-2">Teacher Script:</p>
-            <p>"Now, open your books. Let's look at what Emperor Qin left behind. <span class="highlight">Why would he bury 8,000 stone soldiers?</span>"</p>
+            <p>"Now, open your books. Let's look at what Emperor Qin left behind. Why would he bury 8,000 stone soldiers?"</p>
+        </div>
+    </div>
+
+    <!-- SLIDE 5: DISCUSSION TRIAD (EX 5) -->
+    <div class="slide" id="slide5">
+        <div class="bg-overlay" style="background-color: #1e293b;"></div> <!-- Dark Blue BG -->
+
+        <div class="mb-6">
+            <span class="bg-pink-500 text-white px-4 py-1 rounded-full text-sm font-bold tracking-widest uppercase inline-block">Phase 5: Critical Thinking</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-6xl text-left">
+            
+            <!-- Left: Task & Roles -->
+            <div>
+                <h2 class="text-3xl font-bold mb-6 text-pink-100">Discussion Questions</h2>
+                <div class="bg-white/10 p-6 rounded-xl backdrop-blur-md border border-white/20 mb-6">
+                    <p class="text-xl mb-4 text-pink-300 font-bold">1. Why do we have museums? What do you think museums can teach us?</p>
+                    <p class="text-xl text-blue-300 font-bold">2. What makes a good museum? Think of a museum you like. What makes you want to visit?</p>
+                </div>
+
+                <!-- Triad Roles -->
+                <div class="flex gap-4">
+                    <!-- Speaker -->
+                    <div class="role-card speaker">
+                        <span class="role-icon">🗣️</span>
+                        <h3 class="text-lg font-bold text-pink-600">The Speaker</h3>
+                        <div class="role-instructions text-gray-600">
+                            <ul class="list-decimal pl-4">
+                                <li>Share your opinion on the topic first.</li>
+                                <li>Use "Language Bank" phrases.</li>
+                                <li>Speak for 1 minute.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- Questioner -->
+                    <div class="role-card questioner">
+                        <span class="role-icon">❓</span>
+                        <h3 class="text-lg font-bold text-blue-600">The Questioner</h3>
+                        <div class="role-instructions text-gray-600">
+                            <ul class="list-decimal pl-4">
+                                <li>Listens carefully without interrupting.</li>
+                                <li>Asks ONE follow-up: <em>"Why do you think...?"</em></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Note-Taker -->
+                    <div class="role-card notetaker">
+                        <span class="role-icon">📝</span>
+                        <h3 class="text-lg font-bold text-green-600">The Note-Taker</h3>
+                        <div class="role-instructions text-gray-600">
+                            <ul class="list-decimal pl-4">
+                                <li>Writes down the best arguments.</li>
+                                <li>Reports one key idea to the class.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Language Bank & Timer -->
+            <div class="flex flex-col h-full">
+                <div class="bg-yellow-50 text-slate-900 p-6 rounded-xl border-l-8 border-yellow-500 shadow-xl flex-grow">
+                    <h3 class="text-xl font-black uppercase mb-4 text-yellow-700 flex items-center gap-2">
+                        <span>💬</span> Language Bank
+                    </h3>
+                    <ul class="space-y-3 font-medium text-sm">
+                        <li>👉 <em>I reckon we have museums because...</em></li>
+                        <li>👉 <em>From my point of view...</em></li>
+                        <li>👉 <em>It’s obvious that...</em></li>
+                        <li>👉 <em>I’d go as far as to say that...</em></li>
+                        <li>👉 <em>(It’s) in the museum because of...</em></li>
+                        <li>👉 <em>Museums are great for... owing to...</em></li>
+                    </ul>
+                </div>
+
+                <!-- Timer -->
+                <div class="mt-6 flex items-center justify-between bg-black/40 p-4 rounded-xl">
+                     <div class="text-right">
+                        <p class="text-xs text-gray-400 uppercase">Discussion Time</p>
+                        <p id="timer-text-2" class="text-3xl font-mono font-bold text-white">3:00</p>
+                    </div>
+                    <button onclick="startTimer(2, 180)" id="start-btn-2" class="bg-pink-600 hover:bg-pink-500 text-white font-bold py-2 px-6 rounded-full transition shadow-lg text-sm">
+                        Start Round
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -215,54 +389,71 @@
             
             currentSlide += direction;
             
-            // Loop functionality (optional, currently strictly linear 0-3)
             if (currentSlide < 0) currentSlide = 0;
             if (currentSlide >= slides.length) currentSlide = slides.length - 1;
             
             slides[currentSlide].classList.add('active');
         }
 
-        // Timer Logic
-        let timeLeft = 60;
-        let timerInterval;
-        const totalTime = 60;
-        const timerRing = document.getElementById('timer-ring');
-        const circumference = 2 * Math.PI * 120; // r=120
+        // Timer Logic (Reusable)
+        let timers = {}; 
 
-        timerRing.style.strokeDasharray = `${circumference} ${circumference}`;
-
-        function setProgress(percent) {
-            const offset = circumference - percent / 100 * circumference;
-            timerRing.style.strokeDashoffset = offset;
+        function setProgress(id, percent, circumference) {
+            const ring = document.getElementById(`timer-ring-${id}`);
+            if(ring) {
+                const offset = circumference - percent / 100 * circumference;
+                ring.style.strokeDashoffset = offset;
+            }
         }
 
-        function startTimer() {
-            const btn = document.getElementById('start-btn');
-            btn.style.display = 'none'; // Hide button once started
-            
-            timerInterval = setInterval(() => {
-                timeLeft--;
-                document.getElementById('timer-text').innerText = timeLeft;
-                
-                // Calculate percentage
-                const percent = (timeLeft / totalTime) * 100;
-                setProgress(percent);
+        function startTimer(id, duration) {
+            const btn = document.getElementById(`start-btn-${id}`);
+            const textDisplay = document.getElementById(`timer-text-${id}`);
+            const ring = document.getElementById(`timer-ring-${id}`);
 
-                // Change color near end
-                if (timeLeft <= 10) {
-                    timerRing.style.stroke = '#ef4444'; // Red
-                    document.getElementById('timer-text').classList.add('text-red-500');
+            if(btn) btn.style.display = 'none'; 
+            
+            let timeLeft = duration;
+            let circumference = 0;
+
+            if (ring) {
+                const radius = ring.getAttribute('r');
+                circumference = 2 * Math.PI * radius;
+                ring.style.strokeDasharray = `${circumference} ${circumference}`;
+            }
+
+            timers[id] = setInterval(() => {
+                timeLeft--;
+                
+                // Format MM:SS for the digital display
+                if (id === 2) {
+                    const minutes = Math.floor(timeLeft / 60);
+                    const seconds = timeLeft % 60;
+                    textDisplay.innerText = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+                } else {
+                    textDisplay.innerText = timeLeft;
+                }
+
+                if (ring) {
+                    const percent = (timeLeft / duration) * 100;
+                    setProgress(id, percent, circumference);
                 }
 
                 if (timeLeft <= 0) {
-                    clearInterval(timerInterval);
-                    document.getElementById('timer-text').innerText = "0";
-                    
-                    // Play a soft sound or visual cue
+                    clearInterval(timers[id]);
+                    textDisplay.innerText = id === 2 ? "0:00" : "0";
                     const audio = new Audio('https://actions.google.com/sounds/v1/alarms/beep_short.ogg');
                     audio.play();
                 }
             }, 1000);
+        }
+
+        // Reveal Logic
+        function reveal(btn, text) {
+            const p = btn.nextElementSibling;
+            p.innerText = text;
+            p.classList.remove('hidden');
+            btn.style.display = 'none';
         }
     </script>
 </body>
