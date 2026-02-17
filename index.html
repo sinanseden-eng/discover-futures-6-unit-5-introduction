@@ -113,26 +113,27 @@
         .role-card {
             background: white;
             color: #0f172a;
-            padding: 1.5rem;
+            padding: 1rem; /* Reduced padding */
             border-radius: 1rem;
-            width: 280px;
+            width: 100%; /* Flexible width */
             text-align: left;
             box-shadow: 0 10px 20px rgba(0,0,0,0.3);
             border-top: 5px solid transparent;
+            margin-bottom: 0.5rem;
         }
         .role-card.speaker { border-color: #db2777; }
         .role-card.questioner { border-color: #2563eb; }
         .role-card.notetaker { border-color: #16a34a; }
         
-        .role-icon { font-size: 2rem; margin-bottom: 0.5rem; display: block; }
+        .role-icon { font-size: 1.5rem; margin-bottom: 0.2rem; display: block; }
         
         .role-instructions {
             background-color: #f1f5f9;
             padding: 0.5rem;
             border-radius: 0.5rem;
             margin-top: 0.5rem;
-            font-size: 0.85rem;
-            line-height: 1.4;
+            font-size: 0.75rem; /* Smaller text */
+            line-height: 1.3;
         }
     </style>
 </head>
@@ -251,7 +252,7 @@
             <!-- Item 3: Strigil -->
             <div class="artifact-card group">
                 <div class="h-56 bg-black/40 rounded flex items-center justify-center mb-3 overflow-hidden">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Strigil%2C_Roman%2C_199_BCE-500_CE_Wellcome_L0058129.jpg/800px-Strigil%2C_Roman%2C_199_BCE-500_CE_Wellcome_L0058129.jpg" alt="Strigil" class="object-cover h-full w-full opacity-90 group-hover:opacity-100 transition">
+                    <img src="https://i.redd.it/tl9ef5rg8vm41.jpg" alt="Strigil" class="object-cover h-full w-full opacity-90 group-hover:opacity-100 transition">
                 </div>
                 <h3 class="font-bold text-lg mb-2">Curved Metal Tool</h3>
                 <p class="text-sm text-gray-300 mb-3 italic">Bronze handle. Curved blade.</p>
@@ -290,68 +291,81 @@
     <div class="slide" id="slide5">
         <div class="bg-overlay" style="background-color: #1e293b;"></div> <!-- Dark Blue BG -->
 
-        <div class="mb-6">
+        <div class="mb-4">
             <span class="bg-pink-500 text-white px-4 py-1 rounded-full text-sm font-bold tracking-widest uppercase inline-block">Phase 5: Critical Thinking</span>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-6xl text-left">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-6xl text-left h-full max-h-[85vh]">
             
             <!-- Left: Task & Roles -->
-            <div>
-                <h2 class="text-3xl font-bold mb-6 text-pink-100">Discussion Questions</h2>
-                <div class="bg-white/10 p-6 rounded-xl backdrop-blur-md border border-white/20 mb-6">
-                    <p class="text-xl mb-4 text-pink-300 font-bold">1. Why do we have museums? What do you think museums can teach us?</p>
-                    <p class="text-xl text-blue-300 font-bold">2. What makes a good museum? Think of a museum you like. What makes you want to visit?</p>
+            <div class="flex flex-col gap-4">
+                <div>
+                    <h2 class="text-2xl font-bold mb-3 text-pink-100">Discussion Questions</h2>
+                    <div class="bg-white/10 p-4 rounded-xl backdrop-blur-md border border-white/20">
+                        <p class="text-lg mb-3 text-pink-300 font-bold">1. Why do we have museums? What do you think museums can teach us?</p>
+                        <p class="text-lg text-blue-300 font-bold">2. What makes a good museum? Think of a museum you like. What makes you want to visit?</p>
+                    </div>
                 </div>
 
                 <!-- Triad Roles -->
-                <div class="flex gap-4">
+                <div class="flex flex-col gap-2">
                     <!-- Speaker -->
                     <div class="role-card speaker">
-                        <span class="role-icon">🗣️</span>
-                        <h3 class="text-lg font-bold text-pink-600">The Speaker</h3>
-                        <div class="role-instructions text-gray-600">
-                            <ul class="list-decimal pl-4">
-                                <li>Share your opinion on the topic first.</li>
-                                <li>Use "Language Bank" phrases.</li>
-                                <li>Speak for 1 minute.</li>
-                            </ul>
+                        <div class="flex items-center gap-3">
+                            <span class="text-2xl">🗣️</span>
+                            <div>
+                                <h3 class="text-sm font-bold text-pink-600">The Speaker</h3>
+                                <div class="role-instructions text-gray-600">
+                                    <ul class="list-decimal pl-4">
+                                        <li>Share your opinion on the topic first.</li>
+                                        <li>Use "Language Bank" phrases.</li>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     
                     <!-- Questioner -->
                     <div class="role-card questioner">
-                        <span class="role-icon">❓</span>
-                        <h3 class="text-lg font-bold text-blue-600">The Questioner</h3>
-                        <div class="role-instructions text-gray-600">
-                            <ul class="list-decimal pl-4">
-                                <li>Listens carefully without interrupting.</li>
-                                <li>Asks ONE follow-up: <em>"Why do you think...?"</em></li>
-                            </ul>
+                        <div class="flex items-center gap-3">
+                            <span class="text-2xl">❓</span>
+                            <div>
+                                <h3 class="text-sm font-bold text-blue-600">The Questioner</h3>
+                                <div class="role-instructions text-gray-600">
+                                    <ul class="list-decimal pl-4">
+                                        <li>Listens carefully without interrupting.</li>
+                                        <li>Asks ONE follow-up: <em>"Why do you think...?"</em></li>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
                     <!-- Note-Taker -->
                     <div class="role-card notetaker">
-                        <span class="role-icon">📝</span>
-                        <h3 class="text-lg font-bold text-green-600">The Note-Taker</h3>
-                        <div class="role-instructions text-gray-600">
-                            <ul class="list-decimal pl-4">
-                                <li>Writes down the best arguments.</li>
-                                <li>Reports one key idea to the class.</li>
-                            </ul>
+                        <div class="flex items-center gap-3">
+                            <span class="text-2xl">📝</span>
+                            <div>
+                                <h3 class="text-sm font-bold text-green-600">The Note-Taker</h3>
+                                <div class="role-instructions text-gray-600">
+                                    <ul class="list-decimal pl-4">
+                                        <li>Writes down the best arguments.</li>
+                                        <li>Reports one key idea to the class.</li>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
             <!-- Right: Language Bank & Timer -->
-            <div class="flex flex-col h-full">
-                <div class="bg-yellow-50 text-slate-900 p-6 rounded-xl border-l-8 border-yellow-500 shadow-xl flex-grow">
-                    <h3 class="text-xl font-black uppercase mb-4 text-yellow-700 flex items-center gap-2">
+            <div class="flex flex-col h-full gap-4">
+                <div class="bg-yellow-50 text-slate-900 p-5 rounded-xl border-l-8 border-yellow-500 shadow-xl flex-grow overflow-y-auto max-h-[400px]">
+                    <h3 class="text-lg font-black uppercase mb-3 text-yellow-700 flex items-center gap-2 sticky top-0 bg-yellow-50">
                         <span>💬</span> Language Bank
                     </h3>
-                    <ul class="space-y-3 font-medium text-sm">
+                    <ul class="space-y-2 font-medium text-sm">
                         <li>👉 <em>I reckon we have museums because...</em></li>
                         <li>👉 <em>From my point of view...</em></li>
                         <li>👉 <em>It’s obvious that...</em></li>
@@ -362,7 +376,7 @@
                 </div>
 
                 <!-- Timer -->
-                <div class="mt-6 flex items-center justify-between bg-black/40 p-4 rounded-xl">
+                <div class="flex items-center justify-between bg-black/40 p-4 rounded-xl mt-auto">
                      <div class="text-right">
                         <p class="text-xs text-gray-400 uppercase">Discussion Time</p>
                         <p id="timer-text-2" class="text-3xl font-mono font-bold text-white">3:00</p>
