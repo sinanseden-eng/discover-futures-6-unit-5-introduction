@@ -5,19 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Unit 5: The Mystery Box</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --glass-bg: rgba(15, 23, 42, 0.6);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --accent-gold: #fbbf24;
+        }
+
         body {
             font-family: 'Lato', sans-serif;
             background-color: #0f172a;
             color: #e2e8f0;
             overflow: hidden;
+            margin: 0;
+            padding: 0;
         }
-        h1, h2, h3 {
+
+        h1, h2, h3, .cinzel {
             font-family: 'Cinzel', serif;
         }
         
-        /* Slide Transitions */
+        /* Smooth Slide Transitions */
         .slide {
             display: none;
             height: 100vh;
@@ -25,115 +34,176 @@
             justify-content: center;
             align-items: center;
             text-align: center;
-            animation: fadeIn 0.8s ease-in-out;
             padding: 2rem;
             position: relative;
+            opacity: 0;
+            z-index: 10;
         }
         .slide.active {
             display: flex;
+            animation: slideIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.98); }
-            to { opacity: 1; transform: scale(1); }
+        @keyframes slideIn {
+            0% { opacity: 0; transform: scale(0.95) translateY(20px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
         }
 
-        /* Timer Styles */
+        /* Cinematic Background Zoom (Ken Burns Effect) */
+        .bg-container {
+            position: absolute;
+            top: -5%; left: -5%; width: 110%; height: 110%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        .bg-overlay {
+            width: 100%; height: 100%;
+            background-size: cover;
+            background-position: center;
+            opacity: 0.35;
+            animation: slowZoom 30s linear infinite alternate;
+        }
+
+        @keyframes slowZoom {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.15); }
+        }
+
+        /* Timer Styles - Upgraded */
+        .timer-container {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 2rem auto;
+            border-radius: 50%;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5), inset 0 0 20px rgba(0,0,0,0.5);
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+        }
         .timer-circle {
             transition: stroke-dashoffset 1s linear;
+            filter: drop-shadow(0 0 8px var(--accent-gold));
         }
         
-        /* Teacher Script Box */
+        /* Teacher Script Box - Upgraded Glassmorphism */
         .script-box {
-            background: rgba(0, 0, 0, 0.6);
-            border-left: 4px solid #f59e0b;
-            padding: 1rem;
-            margin-top: 2rem;
+            background: linear-gradient(135deg, rgba(0,0,0,0.8) 0%, rgba(15,23,42,0.6) 100%);
+            border-left: 4px solid var(--accent-gold);
+            border-top: 1px solid var(--glass-border);
+            border-right: 1px solid var(--glass-border);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 1.5rem;
+            margin-top: 2.5rem;
             max-width: 800px;
             text-align: left;
             font-size: 1.1rem;
-            border-radius: 0 8px 8px 0;
-            backdrop-filter: blur(5px);
+            border-radius: 0 12px 12px 0;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transform: translateY(0);
+            transition: transform 0.3s ease;
+        }
+        .script-box:hover {
+            transform: translateY(-5px);
         }
 
-        .highlight { color: #facc15; font-weight: bold; }
+        .highlight { color: var(--accent-gold); font-weight: 900; text-shadow: 0 0 10px rgba(251, 191, 36, 0.3); }
 
-        /* Navigation Buttons */
+        /* Navigation Buttons - Premium */
         .nav-btn {
             position: absolute;
             bottom: 2rem;
             right: 2rem;
-            background: #ffffff;
-            color: #000;
-            padding: 0.8rem 1.5rem;
+            background: linear-gradient(to right, #ffffff, #e2e8f0);
+            color: #0f172a;
+            padding: 0.8rem 2rem;
             border-radius: 50px;
-            font-weight: bold;
+            font-weight: 900;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-size: 0.85rem;
             cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 0 15px rgba(255,255,255,0.2);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 15px rgba(255,255,255,0.2), inset 0 -2px 5px rgba(0,0,0,0.1);
             z-index: 50;
+            border: none;
         }
         .nav-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 25px rgba(255,255,255,0.4);
+            transform: scale(1.05) translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255,255,255,0.4), inset 0 -2px 5px rgba(0,0,0,0.1);
         }
         
         .prev-btn {
             right: auto;
             left: 2rem;
-            background: rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.05);
             color: white;
+            border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: none;
+        }
+        .prev-btn:hover {
+            background: rgba(255,255,255,0.1);
+            box-shadow: 0 4px 15px rgba(255,255,255,0.1);
         }
 
-        /* Background Images */
-        .bg-overlay {
+        /* Artifact Card - 3D Hover */
+        .artifact-card {
+            background: linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%);
+            border: 1px solid var(--glass-border);
+            border-radius: 1.25rem;
+            padding: 1.25rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        .artifact-card::before {
+            content: '';
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1;
-            opacity: 0.3;
-            background-size: cover;
-            background-position: center;
-        }
-
-        /* Artifact Card */
-        .artifact-card {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 1rem;
-            padding: 1rem;
-            backdrop-filter: blur(10px);
-            transition: transform 0.3s;
+            background: radial-gradient(circle at top right, rgba(255,255,255,0.1) 0%, transparent 60%);
+            pointer-events: none;
         }
         .artifact-card:hover {
-            transform: translateY(-5px);
-            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-10px) scale(1.02);
+            border-color: rgba(20, 184, 166, 0.5); /* Teal accent */
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5), 0 0 20px rgba(20, 184, 166, 0.2);
         }
         
-        /* Role Card */
+        /* Role Card - Refined */
         .role-card {
-            background: white;
+            background: rgba(255,255,255,0.95);
             color: #0f172a;
-            padding: 1rem; /* Reduced padding */
+            padding: 1rem;
             border-radius: 1rem;
-            width: 100%; /* Flexible width */
+            width: 100%;
             text-align: left;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
             border-top: 5px solid transparent;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.75rem;
+            transition: transform 0.3s ease;
         }
+        .role-card:hover { transform: translateX(5px); }
         .role-card.speaker { border-color: #db2777; }
         .role-card.questioner { border-color: #2563eb; }
         .role-card.notetaker { border-color: #16a34a; }
         
-        .role-icon { font-size: 1.5rem; margin-bottom: 0.2rem; display: block; }
+        .role-icon { font-size: 1.8rem; margin-bottom: 0.2rem; display: block; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); }
         
         .role-instructions {
-            background-color: #f1f5f9;
-            padding: 0.5rem;
+            background-color: #f8fafc;
+            padding: 0.75rem;
             border-radius: 0.5rem;
             margin-top: 0.5rem;
-            font-size: 0.75rem; /* Smaller text */
-            line-height: 1.3;
+            font-size: 0.8rem;
+            line-height: 1.4;
+            border: 1px solid #e2e8f0;
+        }
+
+        /* Glowing text effect for main titles */
+        .text-glow {
+            text-shadow: 0 0 20px rgba(251, 191, 36, 0.5);
         }
     </style>
 </head>
@@ -141,191 +211,208 @@
 
     <!-- SLIDE 1: THE SETUP -->
     <div class="slide active" id="slide1">
-        <div class="bg-overlay" style="background-image: url('https://images.unsplash.com/photo-1461360370896-922624d12aa1?q=80&w=1600&auto=format&fit=crop');"></div>
-        
-        <div class="mb-8">
-            <span class="bg-amber-500 text-black px-4 py-1 rounded-full text-sm font-bold tracking-widest uppercase mb-4 inline-block">Phase 1: The Setup</span>
+        <div class="bg-container">
+            <div class="bg-overlay" style="background-image: url('https://images.unsplash.com/photo-1461360370896-922624d12aa1?q=80&w=1600&auto=format&fit=crop');"></div>
         </div>
         
-        <h1 class="text-6xl md:text-8xl font-black mb-6 text-transparent bg-clip-text bg-gradient-to-r from-amber-200 to-yellow-500">
+        <div class="mb-8">
+            <span class="bg-amber-500 text-black px-5 py-1.5 rounded-full text-xs font-black tracking-[0.2em] uppercase mb-4 inline-block shadow-[0_0_15px_rgba(245,158,11,0.5)]">Phase 1: The Setup</span>
+        </div>
+        
+        <h1 class="text-6xl md:text-8xl font-black mb-6 text-transparent bg-clip-text bg-gradient-to-br from-amber-100 via-amber-300 to-yellow-600 text-glow">
             2,000 Years Later...
         </h1>
         
-        <div class="text-9xl mb-8">⚱️</div>
+        <div class="text-9xl mb-8 drop-shadow-2xl hover:scale-110 transition-transform duration-500 cursor-default">⚱️</div>
 
         <div class="script-box">
-            <p class="text-amber-400 font-bold text-xs uppercase mb-2">Teacher Script:</p>
+            <p class="text-amber-400 font-black text-xs tracking-widest uppercase mb-2">Teacher Script:</p>
             <p>"Imagine this classroom is buried under lava tomorrow. 2,000 years from now, future archaeologists dig it up. They find <span class="highlight">one object that represents YOU</span>. Just one."</p>
         </div>
     </div>
 
     <!-- SLIDE 2: THE BUZZ (TIMER) -->
     <div class="slide" id="slide2">
-        <div class="bg-overlay" style="background-image: url('https://images.unsplash.com/photo-1516934024742-b461fba47600?q=80&w=1600&auto=format&fit=crop');"></div>
-
-        <div class="mb-4">
-            <span class="bg-blue-500 text-white px-4 py-1 rounded-full text-sm font-bold tracking-widest uppercase inline-block">Phase 2: The Buzz</span>
+        <div class="bg-container">
+            <div class="bg-overlay" style="background-image: url('https://images.unsplash.com/photo-1516934024742-b461fba47600?q=80&w=1600&auto=format&fit=crop');"></div>
         </div>
 
-        <h2 class="text-4xl font-bold mb-4">What is that one object?</h2>
-        <p class="text-red-300 font-bold text-lg mb-6 bg-red-900/50 px-4 py-2 rounded-lg border border-red-500/50 animate-pulse">
-            ⚠️ RULE: No electronics! (No phones, no headphones)
-        </p>
+        <div class="mb-6">
+            <span class="bg-blue-500 text-white px-5 py-1.5 rounded-full text-xs font-black tracking-[0.2em] uppercase inline-block shadow-[0_0_15px_rgba(59,130,246,0.5)]">Phase 2: The Buzz</span>
+        </div>
+
+        <h2 class="text-5xl font-bold mb-6 text-white text-glow cinzel">What is that one object?</h2>
+        
+        <div class="bg-red-900/40 backdrop-blur-md px-6 py-3 rounded-xl border border-red-500/50 shadow-[0_0_20px_rgba(239,68,68,0.3)] mb-8">
+            <p class="text-red-200 font-bold text-xl tracking-wide flex items-center gap-3">
+                <span class="animate-pulse">⚠️</span> RULE: No electronics! (No phones, no headphones)
+            </p>
+        </div>
 
         <!-- Circular Timer -->
-        <div class="relative w-64 h-64 flex items-center justify-center mb-8">
-            <svg class="w-full h-full transform -rotate-90">
-                <circle cx="128" cy="128" r="120" stroke="#334155" stroke-width="8" fill="none"></circle>
-                <circle id="timer-ring-1" cx="128" cy="128" r="120" stroke="#facc15" stroke-width="8" fill="none" stroke-dasharray="754" stroke-dashoffset="0" class="timer-circle"></circle>
+        <div class="timer-container flex items-center justify-center mb-8">
+            <svg class="absolute top-0 left-0 w-full h-full transform -rotate-90">
+                <circle cx="100" cy="100" r="90" stroke="rgba(255,255,255,0.1)" stroke-width="8" fill="none"></circle>
+                <circle id="timer-ring-1" cx="100" cy="100" r="90" stroke="#facc15" stroke-width="8" fill="none" stroke-linecap="round" stroke-dasharray="565.48" stroke-dashoffset="0" class="timer-circle"></circle>
             </svg>
-            <div id="timer-text-1" class="absolute text-7xl font-mono font-bold text-white">60</div>
+            <div id="timer-text-1" class="absolute text-6xl font-mono font-black text-white drop-shadow-md">60</div>
         </div>
 
-        <button onclick="startTimer(1, 60)" id="start-btn-1" class="bg-green-600 hover:bg-green-500 text-white font-bold py-3 px-8 rounded-full text-xl transition transform hover:scale-105 shadow-lg flex items-center gap-2">
-            <span>⏱️</span> Start Timer
+        <button onclick="startTimer(1, 60)" id="start-btn-1" class="bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-400 hover:to-green-500 text-white font-bold py-3.5 px-10 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-[0_10px_20px_rgba(16,185,129,0.4)] flex items-center gap-3 border border-green-400/50">
+            <span class="text-2xl">⏱️</span> <span>Start Timer</span>
         </button>
 
         <div class="script-box">
-            <p class="text-amber-400 font-bold text-xs uppercase mb-2">Teacher Script:</p>
+            <p class="text-amber-400 font-black text-xs tracking-widest uppercase mb-2">Teacher Script:</p>
             <p>"Turn to your partner. Decide: Is it your favorite sneaker? A water bottle? Your backpack? <span class="highlight">Remember: No technology!</span> What would archaeologists THINK it was used for?"</p>
         </div>
     </div>
 
     <!-- SLIDE 3: THE REVEAL -->
     <div class="slide" id="slide3">
-        <div class="bg-overlay" style="background-image: url('https://images.unsplash.com/photo-1550948329-08071ce5f502?q=80&w=1600&auto=format&fit=crop');"></div>
+        <div class="bg-container">
+            <div class="bg-overlay" style="background-image: url('https://images.unsplash.com/photo-1550948329-08071ce5f502?q=80&w=1600&auto=format&fit=crop');"></div>
+        </div>
         
         <div class="mb-8">
-            <span class="bg-purple-500 text-white px-4 py-1 rounded-full text-sm font-bold tracking-widest uppercase inline-block">Phase 3: The Reveal</span>
+            <span class="bg-purple-500 text-white px-5 py-1.5 rounded-full text-xs font-black tracking-[0.2em] uppercase inline-block shadow-[0_0_15px_rgba(168,85,247,0.5)]">Phase 3: The Reveal</span>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-5xl w-full">
-            <div class="bg-black/50 p-8 rounded-2xl border border-purple-500/30 backdrop-blur-sm">
-                <div class="text-6xl mb-4">👟</div>
-                <h3 class="text-2xl font-bold mb-2">A Sneaker?</h3>
-                <p class="text-purple-300 italic">"A ceremonial boat for the foot..."</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 max-w-5xl w-full">
+            <div class="bg-black/40 p-10 rounded-3xl border border-purple-500/30 backdrop-blur-md shadow-2xl hover:bg-black/50 transition-colors">
+                <div class="text-7xl mb-6 drop-shadow-lg">👟</div>
+                <h3 class="text-3xl font-bold mb-4 text-white cinzel">A Sneaker?</h3>
+                <p class="text-purple-300 italic text-xl font-light">"A ceremonial boat for the foot..."</p>
             </div>
-            <div class="bg-black/50 p-8 rounded-2xl border border-purple-500/30 backdrop-blur-sm">
-                <div class="text-6xl mb-4">🥤</div>
-                <h3 class="text-2xl font-bold mb-2">Water Bottle?</h3>
-                <p class="text-purple-300 italic">"A vessel for holding sacred holy water..."</p>
+            <div class="bg-black/40 p-10 rounded-3xl border border-purple-500/30 backdrop-blur-md shadow-2xl hover:bg-black/50 transition-colors">
+                <div class="text-7xl mb-6 drop-shadow-lg">🥤</div>
+                <h3 class="text-3xl font-bold mb-4 text-white cinzel">Water Bottle?</h3>
+                <p class="text-purple-300 italic text-xl font-light">"A vessel for holding sacred holy water..."</p>
             </div>
         </div>
 
         <div class="script-box">
-            <p class="text-amber-400 font-bold text-xs uppercase mb-2">Teacher Script:</p>
+            <p class="text-amber-400 font-black text-xs tracking-widest uppercase mb-2">Teacher Script:</p>
             <p>"Exactly. We leave everyday things behind. Archaeologists find them. And then... <span class="highlight">they GUESS. They SPECULATE.</span> Sometimes right, sometimes wrong."</p>
         </div>
     </div>
 
     <!-- SLIDE 3.5: MYSTERY ARTIFACTS -->
     <div class="slide" id="slide3b">
-        <div class="bg-overlay" style="background-image: url('https://images.unsplash.com/photo-1588863673516-72f567341399?q=80&w=1600&auto=format&fit=crop'); opacity: 0.4;"></div>
+        <div class="bg-container">
+            <div class="bg-overlay" style="background-image: url('https://images.unsplash.com/photo-1588863673516-72f567341399?q=80&w=1600&auto=format&fit=crop'); opacity: 0.25;"></div>
+        </div>
         
         <div class="mb-4">
-            <span class="bg-teal-500 text-white px-4 py-1 rounded-full text-sm font-bold tracking-widest uppercase inline-block">Phase 3.5: Real Mysteries</span>
+            <span class="bg-teal-500 text-white px-5 py-1.5 rounded-full text-xs font-black tracking-[0.2em] uppercase inline-block shadow-[0_0_15px_rgba(20,184,166,0.5)]">Phase 3.5: Real Mysteries</span>
         </div>
 
-        <h2 class="text-3xl font-bold mb-6 text-teal-100">What were these used for?</h2>
+        <h2 class="text-4xl font-bold mb-8 text-teal-100 cinzel text-shadow">What were these used for?</h2>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-6xl">
             <!-- Item 1: Roman Dodecahedron -->
             <div class="artifact-card group">
-                <div class="h-56 bg-black/40 rounded flex items-center justify-center mb-3 overflow-hidden">
-                    <img src="https://th-thumbnailer.cdn-si-edu.com/97gmJK71gk9qfk0jnA9OE622lXg=/1026x684/filters:no_upscale():focal(640x482:641x483)/https://tf-cmsv2-smithsonianmag-media.s3.amazonaws.com/filer_public/5b/ec/5bec3ebf-4cc4-4fd3-a525-ac82c0a78d72/img_4496_1.jpeg" alt="Dodecahedron" class="object-cover h-full w-full opacity-90 group-hover:opacity-100 transition">
+                <div class="h-48 bg-black/60 rounded-xl flex items-center justify-center mb-4 overflow-hidden border border-white/10">
+                    <img src="https://th-thumbnailer.cdn-si-edu.com/97gmJK71gk9qfk0jnA9OE622lXg=/1026x684/filters:no_upscale():focal(640x482:641x483)/https://tf-cmsv2-smithsonianmag-media.s3.amazonaws.com/filer_public/5b/ec/5bec3ebf-4cc4-4fd3-a525-ac82c0a78d72/img_4496_1.jpeg" alt="Dodecahedron" class="object-cover h-full w-full opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500">
                 </div>
-                <h3 class="font-bold text-lg mb-2">Roman Dodecahedron</h3>
-                <p class="text-sm text-gray-300 mb-3 italic">Bronze. Holes of different sizes.</p>
-                <button onclick="reveal(this, 'Knitting glove fingers? Rangefinder? A toy? No one knows!')" class="w-full bg-teal-700 hover:bg-teal-600 py-2 rounded text-xs font-bold transition">Reveal Guess</button>
-                <p class="hidden-answer text-teal-300 text-sm font-bold mt-2 hidden"></p>
+                <h3 class="font-bold text-xl mb-1 text-white tracking-wide">Roman Dodecahedron</h3>
+                <p class="text-sm text-teal-200/80 mb-4 italic font-light">Bronze. Holes of different sizes.</p>
+                <button onclick="reveal(this, 'Knitting glove fingers? Rangefinder? A toy? No one knows!')" class="w-full bg-teal-600/80 hover:bg-teal-500 py-3 rounded-lg text-sm font-bold transition-all shadow-lg border border-teal-400/50 text-white uppercase tracking-wider">Reveal Guess</button>
+                <p class="hidden-answer text-teal-300 text-sm font-bold mt-3 hidden bg-teal-900/50 p-3 rounded-lg border border-teal-500/30"></p>
             </div>
             <!-- Item 2: Egyptian Headrest -->
             <div class="artifact-card group">
-                <div class="h-56 bg-black/40 rounded flex items-center justify-center mb-3 overflow-hidden">
-                    <img src="https://www.alexanderancientart.com/object-pics/1072a.jpg" alt="Headrest" class="object-cover h-full w-full opacity-90 group-hover:opacity-100 transition">
+                <div class="h-48 bg-black/60 rounded-xl flex items-center justify-center mb-4 overflow-hidden border border-white/10">
+                    <img src="https://www.alexanderancientart.com/object-pics/1072a.jpg" alt="Headrest" class="object-cover h-full w-full opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500">
                 </div>
-                <h3 class="font-bold text-lg mb-2">Egyptian Stand</h3>
-                <p class="text-sm text-gray-300 mb-3 italic">Wooden. Curved top.</p>
-                <button onclick="reveal(this, 'An ancient PILLOW! Used to keep heads cool while sleeping.')" class="w-full bg-teal-700 hover:bg-teal-600 py-2 rounded text-xs font-bold transition">Reveal Guess</button>
-                <p class="hidden-answer text-teal-300 text-sm font-bold mt-2 hidden"></p>
+                <h3 class="font-bold text-xl mb-1 text-white tracking-wide">Egyptian Stand</h3>
+                <p class="text-sm text-teal-200/80 mb-4 italic font-light">Wooden. Curved top.</p>
+                <button onclick="reveal(this, 'An ancient PILLOW! Used to keep heads cool while sleeping.')" class="w-full bg-teal-600/80 hover:bg-teal-500 py-3 rounded-lg text-sm font-bold transition-all shadow-lg border border-teal-400/50 text-white uppercase tracking-wider">Reveal Guess</button>
+                <p class="hidden-answer text-teal-300 text-sm font-bold mt-3 hidden bg-teal-900/50 p-3 rounded-lg border border-teal-500/30"></p>
             </div>
             <!-- Item 3: Strigil -->
             <div class="artifact-card group">
-                <div class="h-56 bg-black/40 rounded flex items-center justify-center mb-3 overflow-hidden">
-                    <img src="https://coimages.sciencemuseumgroup.org.uk/351/507/medium_smg00237229.jpg" alt="Strigil" class="object-cover h-full w-full opacity-90 group-hover:opacity-100 transition">
+                <div class="h-48 bg-black/60 rounded-xl flex items-center justify-center mb-4 overflow-hidden border border-white/10">
+                    <img src="https://coimages.sciencemuseumgroup.org.uk/351/507/medium_smg00237229.jpg" alt="Strigil" class="object-cover h-full w-full opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500">
                 </div>
-                <h3 class="font-bold text-lg mb-2">Curved Metal Tool</h3>
-                <p class="text-sm text-gray-300 mb-3 italic">Bronze handle. Curved blade.</p>
-                <button onclick="reveal(this, 'A Strigil. Used to scrape oil and dirt off skin before soap!')" class="w-full bg-teal-700 hover:bg-teal-600 py-2 rounded text-xs font-bold transition">Reveal Guess</button>
-                <p class="hidden-answer text-teal-300 text-sm font-bold mt-2 hidden"></p>
+                <h3 class="font-bold text-xl mb-1 text-white tracking-wide">Curved Metal Tool</h3>
+                <p class="text-sm text-teal-200/80 mb-4 italic font-light">Bronze handle. Curved blade.</p>
+                <button onclick="reveal(this, 'A Strigil. Used to scrape oil and dirt off skin before soap!')" class="w-full bg-teal-600/80 hover:bg-teal-500 py-3 rounded-lg text-sm font-bold transition-all shadow-lg border border-teal-400/50 text-white uppercase tracking-wider">Reveal Guess</button>
+                <p class="hidden-answer text-teal-300 text-sm font-bold mt-3 hidden bg-teal-900/50 p-3 rounded-lg border border-teal-500/30"></p>
             </div>
         </div>
     </div>
 
     <!-- SLIDE 4: THE BRIDGE -->
     <div class="slide" id="slide4">
-        <div class="bg-overlay" style="background-image: url('https://images.unsplash.com/photo-1599571343764-d24eb3606f7b?q=80&w=1600&auto=format&fit=crop'); opacity: 0.5;"></div>
-
-        <div class="mb-6">
-            <span class="bg-red-500 text-white px-4 py-1 rounded-full text-sm font-bold tracking-widest uppercase inline-block">Phase 4: The Bridge</span>
+        <div class="bg-container">
+            <div class="bg-overlay" style="background-image: url('https://images.unsplash.com/photo-1599571343764-d24eb3606f7b?q=80&w=1600&auto=format&fit=crop'); opacity: 0.4;"></div>
         </div>
 
-        <h1 class="text-5xl md:text-7xl font-black mb-4 text-white drop-shadow-xl">Emperor Qin's Army</h1>
+        <div class="mb-6">
+            <span class="bg-red-500 text-white px-5 py-1.5 rounded-full text-xs font-black tracking-[0.2em] uppercase inline-block shadow-[0_0_15px_rgba(239,68,68,0.5)]">Phase 4: The Bridge</span>
+        </div>
 
-        <p class="text-2xl text-red-200 font-light mb-8 max-w-3xl leading-relaxed">
+        <h1 class="text-6xl md:text-8xl font-black mb-4 text-white drop-shadow-2xl cinzel text-glow">Emperor Qin's Army</h1>
+
+        <p class="text-3xl text-red-100 font-light mb-10 max-w-3xl leading-relaxed italic">
             What did he want us to know about him?
         </p>
         
-        <div class="text-center animate-bounce mb-8">
-            <p class="text-lg font-bold uppercase tracking-widest">Open Student Book</p>
-            <p class="text-4xl font-black text-yellow-400">Page 48</p>
+        <div class="text-center mb-10 transform hover:scale-105 transition-transform duration-300">
+            <p class="text-xl font-black uppercase tracking-widest text-white drop-shadow-md">Open Student Book</p>
+            <p class="text-6xl font-black text-amber-400 drop-shadow-[0_5px_5px_rgba(0,0,0,0.8)] mt-2">Page 48</p>
         </div>
 
-        <div class="script-box mb-6">
-            <p class="text-amber-400 font-bold text-xs uppercase mb-2">Teacher Script:</p>
+        <div class="script-box mb-8">
+            <p class="text-amber-400 font-black text-xs tracking-widest uppercase mb-2">Teacher Script:</p>
             <p>"Now, open your books. Let's look at what Emperor Qin left behind. Why would he bury 8,000 stone soldiers?"</p>
         </div>
 
         <!-- NOTE: BOOK EXERCISES REQUIRED -->
-        <div class="bg-blue-900/80 border-2 border-blue-400 p-4 rounded-xl backdrop-blur-sm max-w-2xl animate-pulse">
-            <p class="text-blue-200 font-bold uppercase text-xs tracking-widest mb-1">⚠️ Requirement Check</p>
-            <p class="text-white text-sm md:text-base font-semibold">
-                Complete <span class="text-yellow-400">Exercises 2, 3, and 4 on Page 6 (Discover Futures)</span> before moving to the next phase!
+        <div class="bg-gradient-to-r from-blue-900/90 to-indigo-900/90 border border-blue-400/50 p-5 rounded-2xl backdrop-blur-md max-w-2xl shadow-[0_10px_30px_rgba(0,0,0,0.5)] relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-1 h-full bg-blue-400 shadow-[0_0_10px_#60a5fa]"></div>
+            <p class="text-blue-300 font-black uppercase text-xs tracking-[0.15em] mb-2 flex items-center gap-2">
+                <span class="animate-pulse">⚠️</span> Requirement Check
+            </p>
+            <p class="text-white text-base md:text-lg font-medium leading-snug">
+                Complete <span class="text-amber-400 font-bold">Exercises 2, 3, and 4 on Page 6 (Discover Futures)</span> before moving to the next phase!
             </p>
         </div>
     </div>
 
     <!-- SLIDE 5: DISCUSSION TRIAD (EX 5) -->
     <div class="slide" id="slide5">
-        <div class="bg-overlay" style="background-color: #1e293b;"></div> <!-- Dark Blue BG -->
-
-        <div class="mb-4">
-            <span class="bg-pink-500 text-white px-4 py-1 rounded-full text-sm font-bold tracking-widest uppercase inline-block">Phase 5: Critical Thinking</span>
+        <div class="bg-container">
+            <div class="bg-overlay" style="background-image: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%); opacity: 1; animation: none;"></div>
         </div>
 
-        <!-- Corrected Layout for Timer Visibility -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-6xl text-left h-full max-h-[85vh]">
+        <div class="mb-4">
+            <span class="bg-pink-500 text-white px-5 py-1.5 rounded-full text-xs font-black tracking-[0.2em] uppercase inline-block shadow-[0_0_15px_rgba(236,72,153,0.5)]">Phase 5: Critical Thinking</span>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 w-full max-w-7xl text-left h-full max-h-[85vh]">
             
             <!-- Left: Task & Roles -->
-            <div class="flex flex-col gap-4 overflow-y-auto">
+            <div class="flex flex-col gap-5 overflow-y-auto pr-2 pb-4 scrollbar-hide">
                 <div>
-                    <h2 class="text-2xl font-bold mb-3 text-pink-100">Discussion Questions</h2>
-                    <div class="bg-white/10 p-4 rounded-xl backdrop-blur-md border border-white/20">
-                        <p class="text-lg mb-3 text-pink-300 font-bold">1. Why do we have museums? What do you think museums can teach us?</p>
-                        <p class="text-lg text-blue-300 font-bold">2. What makes a good museum? Think of a museum you like. What makes you want to visit?</p>
+                    <h2 class="text-3xl font-bold mb-4 text-pink-100 cinzel">Discussion Questions</h2>
+                    <div class="bg-white/5 p-5 rounded-2xl backdrop-blur-xl border border-white/10 shadow-lg">
+                        <p class="text-xl mb-4 text-pink-200 font-semibold leading-relaxed border-l-4 border-pink-500 pl-4">1. Why do we have museums? What do you think museums can teach us?</p>
+                        <p class="text-xl text-blue-200 font-semibold leading-relaxed border-l-4 border-blue-500 pl-4">2. What makes a good museum? Think of a museum you like. What makes you want to visit?</p>
                     </div>
                 </div>
 
                 <!-- Triad Roles -->
-                <div class="flex flex-col gap-2">
+                <div class="flex flex-col gap-3">
                     <!-- Speaker -->
-                    <div class="role-card speaker">
-                        <div class="flex items-center gap-3">
-                            <span class="text-2xl">🗣️</span>
-                            <div>
-                                <h3 class="text-sm font-bold text-pink-600">The Speaker</h3>
-                                <div class="role-instructions text-gray-600">
-                                    <ul class="list-decimal pl-4">
+                    <div class="role-card speaker group">
+                        <div class="flex items-center gap-4">
+                            <span class="text-3xl group-hover:scale-110 transition-transform">🗣️</span>
+                            <div class="w-full">
+                                <h3 class="text-base font-black text-pink-600 uppercase tracking-wide">The Speaker</h3>
+                                <div class="role-instructions text-slate-700 bg-pink-50 border-pink-100">
+                                    <ul class="list-decimal pl-5 space-y-1 font-medium">
                                         <li>Share your opinion on the topic first.</li>
                                         <li>Use "Language Bank" phrases.</li>
                                     </ul>
@@ -335,15 +422,15 @@
                     </div>
                     
                     <!-- Questioner -->
-                    <div class="role-card questioner">
-                        <div class="flex items-center gap-3">
-                            <span class="text-2xl">❓</span>
-                            <div>
-                                <h3 class="text-sm font-bold text-blue-600">The Questioner</h3>
-                                <div class="role-instructions text-gray-600">
-                                    <ul class="list-decimal pl-4">
+                    <div class="role-card questioner group">
+                        <div class="flex items-center gap-4">
+                            <span class="text-3xl group-hover:scale-110 transition-transform">❓</span>
+                            <div class="w-full">
+                                <h3 class="text-base font-black text-blue-600 uppercase tracking-wide">The Questioner</h3>
+                                <div class="role-instructions text-slate-700 bg-blue-50 border-blue-100">
+                                    <ul class="list-decimal pl-5 space-y-1 font-medium">
                                         <li>Listens carefully without interrupting.</li>
-                                        <li>Asks ONE follow-up: <em>"Why do you think...?"</em></li>
+                                        <li>Asks ONE follow-up: <em class="text-blue-800">"Why do you think...?"</em></li>
                                     </ul>
                                 </div>
                             </div>
@@ -351,13 +438,13 @@
                     </div>
 
                     <!-- Note-Taker -->
-                    <div class="role-card notetaker">
-                        <div class="flex items-center gap-3">
-                            <span class="text-2xl">📝</span>
-                            <div>
-                                <h3 class="text-sm font-bold text-green-600">The Note-Taker</h3>
-                                <div class="role-instructions text-gray-600">
-                                    <ul class="list-decimal pl-4">
+                    <div class="role-card notetaker group">
+                        <div class="flex items-center gap-4">
+                            <span class="text-3xl group-hover:scale-110 transition-transform">📝</span>
+                            <div class="w-full">
+                                <h3 class="text-base font-black text-green-600 uppercase tracking-wide">The Note-Taker</h3>
+                                <div class="role-instructions text-slate-700 bg-green-50 border-green-100">
+                                    <ul class="list-decimal pl-5 space-y-1 font-medium">
                                         <li>Writes down the best arguments.</li>
                                         <li>Reports one key idea to the class.</li>
                                     </ul>
@@ -368,30 +455,32 @@
                 </div>
             </div>
 
-            <!-- Right: Language Bank & Timer (FIXED LAYOUT) -->
-            <div class="flex flex-col h-full gap-4">
-                <!-- Language Bank with MAX HEIGHT -->
-                <div class="bg-yellow-50 text-slate-900 p-5 rounded-xl border-l-8 border-yellow-500 shadow-xl flex-grow overflow-y-auto max-h-[40vh]">
-                    <h3 class="text-lg font-black uppercase mb-3 text-yellow-700 flex items-center gap-2 sticky top-0 bg-yellow-50">
-                        <span>💬</span> Language Bank
+            <!-- Right: Language Bank & Timer -->
+            <div class="flex flex-col h-full gap-5 pb-4">
+                <!-- Language Bank -->
+                <div class="bg-gradient-to-br from-amber-50 to-orange-50 text-slate-800 p-6 rounded-2xl border border-amber-200 shadow-[0_10px_30px_rgba(0,0,0,0.3)] flex-grow overflow-y-auto max-h-[45vh] relative">
+                    <div class="absolute top-0 left-0 w-2 h-full bg-gradient-to-b from-amber-400 to-orange-500"></div>
+                    <h3 class="text-xl font-black uppercase mb-4 text-amber-800 flex items-center gap-3 sticky top-0 bg-gradient-to-br from-amber-50 to-orange-50 pb-2 z-10">
+                        <span class="text-2xl">💬</span> Language Bank
                     </h3>
-                    <ul class="space-y-2 font-medium text-sm">
-                        <li>👉 <em>I reckon we have museums because...</em></li>
-                        <li>👉 <em>From my point of view...</em></li>
-                        <li>👉 <em>It’s obvious that...</em></li>
-                        <li>👉 <em>I’d go as far as to say that...</em></li>
-                        <li>👉 <em>(It’s) in the museum because of...</em></li>
-                        <li>👉 <em>Museums are great for... owing to...</em></li>
+                    <ul class="space-y-3 font-semibold text-sm md:text-base text-slate-700 pl-2">
+                        <li class="flex items-start gap-2"><span class="text-amber-500 mt-1">👉</span> <span><em>I reckon we have museums because...</em></span></li>
+                        <li class="flex items-start gap-2"><span class="text-amber-500 mt-1">👉</span> <span><em>From my point of view...</em></span></li>
+                        <li class="flex items-start gap-2"><span class="text-amber-500 mt-1">👉</span> <span><em>It’s obvious that...</em></span></li>
+                        <li class="flex items-start gap-2"><span class="text-amber-500 mt-1">👉</span> <span><em>I’d go as far as to say that...</em></span></li>
+                        <li class="flex items-start gap-2"><span class="text-amber-500 mt-1">👉</span> <span><em>(It’s) in the museum because of...</em></span></li>
+                        <li class="flex items-start gap-2"><span class="text-amber-500 mt-1">👉</span> <span><em>Museums are great for... owing to...</em></span></li>
                     </ul>
                 </div>
 
-                <!-- Timer -->
-                <div class="flex items-center justify-between bg-black/40 p-4 rounded-xl mt-auto shadow-lg border border-white/10">
-                     <div class="text-right">
-                        <p class="text-xs text-gray-400 uppercase font-bold tracking-wider">Discussion Time</p>
-                        <p id="timer-text-2" class="text-4xl font-mono font-black text-white drop-shadow-md">3:00</p>
+                <!-- Timer Section -->
+                <div class="flex items-center justify-between bg-slate-800/80 backdrop-blur-xl p-5 rounded-2xl mt-auto shadow-2xl border border-slate-600 relative overflow-hidden">
+                    <div class="absolute -right-10 -top-10 w-32 h-32 bg-pink-500/20 blur-3xl rounded-full"></div>
+                    <div class="text-left relative z-10">
+                        <p class="text-xs text-pink-300 uppercase font-black tracking-[0.15em] mb-1">Discussion Time</p>
+                        <p id="timer-text-2" class="text-5xl font-mono font-black text-white drop-shadow-[0_2px_10px_rgba(255,255,255,0.2)]">3:00</p>
                     </div>
-                    <button onclick="startTimer(2, 180)" id="start-btn-2" class="bg-pink-600 hover:bg-pink-500 text-white font-bold py-3 px-8 rounded-full transition shadow-xl transform hover:scale-105 text-sm uppercase tracking-wide">
+                    <button onclick="startTimer(2, 180)" id="start-btn-2" class="bg-gradient-to-r from-pink-600 to-rose-500 hover:from-pink-500 hover:to-rose-400 text-white font-black py-4 px-8 rounded-xl transition-all duration-300 shadow-[0_10px_25px_rgba(236,72,153,0.4)] transform hover:-translate-y-1 text-sm uppercase tracking-widest border border-pink-400/50 relative z-10">
                         Start Round
                     </button>
                 </div>
@@ -491,13 +580,18 @@
             }, 1000);
         }
 
-        // Reveal Logic
+        // Reveal Logic with Animation Enhancement
         function reveal(btn, text) {
             var p = btn.nextElementSibling;
             p.innerText = text;
             p.classList.remove('hidden');
+            // Adding a small animation class dynamically
+            p.classList.add('animate-[pulse_0.5s_ease-in-out_1]');
             btn.style.display = 'none';
         }
+
+        // Custom scrollbar hiding utility class injection
+        document.head.insertAdjacentHTML("beforeend", `<style>.scrollbar-hide::-webkit-scrollbar { display: none; } .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }</style>`)
 
         // Initialize button state
         updateButtonVisibility();
